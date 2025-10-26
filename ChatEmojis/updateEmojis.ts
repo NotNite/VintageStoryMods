@@ -2,7 +2,6 @@
 
 // nice default type
 import _twemoji from "@twemoji/api";
-
 const twemoji = _twemoji as unknown as (typeof _twemoji)["default"];
 
 const twemojiPath = "../local/twemoji/assets/svg";

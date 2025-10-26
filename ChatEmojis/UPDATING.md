@@ -33,7 +33,7 @@ Paste that file into `../local/shortcodes.json` (such that it's at the root of t
 
 ## Generate the new SVGs
 
-Delete `assets/chatemojis`, then run the script in this folder using [Deno](https://deno.com/):
+Run the script in this folder using [Deno](https://deno.com/):
 
 ```shell
 deno run --allow-read=../local --allow-read=./assets --allow-write=./assets ./updateEmojis.ts

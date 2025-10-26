@@ -3,7 +3,7 @@
   "modid": "chatemojis",
   "name": "Chat Emojis",
   "authors": ["NotNite"],
-  "description": "Adds Twemoji into game chat",
+  "description": "Adds Discord-like emojis into game chat",
   "version": "1.1.0",
   "Side": "Client",
   "dependencies": {
