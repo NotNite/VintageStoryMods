@@ -13,17 +13,22 @@ public partial class Patches {
     [GeneratedRegex(":[\\d+_a-z-]+:")]
     private static partial Regex ShortcodeRegex();
 
+    // insane bullshit hack: spaces between VTML elements aren't preserved properly. this makes two emojis
+    // in a row, or an emoji at the start of the message (because of the name) look wrong. the fix is to detect
+    // the end of a VTML component and add an extra space - this isn't perfect, but it works decently
     [GeneratedRegex("<\\/[^>]*> $")]
     private static partial Regex VtmlEndRegex();
 
-    // patch emojis in from shortcode
     [HarmonyPatch(typeof(HudDialogChat), "OnNewServerToClientChatLine")]
     [HarmonyPrefix]
     private static void OnNewServerToClientChatLine(ref string message) {
-        message = ReplaceShortcodes(message);
+        // codepoints before shortcodes since the VTML causes needless multi-char lookup
+        ReplaceCodepoints(ref message);
+        ReplaceShortcodes(ref message);
     }
 
-    private static string ReplaceShortcodes(string message) {
+    // patch emojis in from shortcode (e.g. :fire:)
+    private static void ReplaceShortcodes(ref string message) {
         // adjustment for when we edit the size of the string - because matches always go forward in the string, this is safe to do
         var adjustment = 0;
 
@@ -36,8 +41,6 @@ public partial class Patches {
             if (ChatEmojisModSystem.EmojiShortcodes?.GetValueOrDefault(shortcode) is { } filename) {
                 var replacement = $"<icon path=\"chatemojis:emojis/{filename}\"></icon>";
 
-                // insane bullshit hack: spaces between VTML elements aren't preserved properly. this makes two emojis
-                // in a row, or an emoji at the start of the message (because of the name) look wrong. the fix:
                 var prev = message[..index];
                 if (VtmlEndRegex().IsMatch(prev)) replacement = " " + replacement;
 
@@ -45,8 +48,76 @@ public partial class Patches {
                 adjustment += replacement.Length - match.Length;
             }
         }
+    }
 
-        return message;
+    // patch emojis in from codepoints (e.g. \uD83D\uDD25)
+    private static void ReplaceCodepoints(ref string message) {
+        // unlike ReplaceShortcodes, we have to index by the absolute position anyway
+        var stringPosition = 0;
+
+        var runes = message.EnumerateRunes().ToList();
+        for (var runeIdx = 0; runeIdx < runes.Count; runeIdx++) {
+            var rune = runes[runeIdx];
+            var codepoint = (uint) rune.Value;
+            var runeLength = rune.Utf16SequenceLength;
+
+            if (ChatEmojisModSystem.MultiCodepointEmojis?.GetValueOrDefault(codepoint) is { } sequences) {
+                var found = false;
+
+                // peek ahead using the first character as a weak form of optimization
+                // this is a list of sequences because a single starting character can lead to multiple emojis
+                // (e.g. U+1F468 "MAN" for all the possible combinations)
+                foreach (var sequence in sequences) {
+                    if (runeIdx + sequence.Count >= runes.Count) continue;
+
+                    var snippet = runes.Slice(runeIdx + 1, sequence.Count);
+                    if (snippet.Select(r => (uint) r.Value).SequenceEqual(sequence)) {
+                        // we do this in the SVG copy script, so have to do it here too
+                        // https://github.com/jdecked/twemoji/blob/50c7abfe6813680455781862f7b34305cd1eb9f5/scripts/build.js#L344
+                        List<uint> codepoints = [codepoint, ..sequence];
+                        if (codepoints.Contains(0xFE0F) && !codepoints.Contains(0x200D)) {
+                            codepoints = codepoints.Where(p => p != 0xFE0F).ToList();
+                        }
+
+                        var filename = string.Join('-', codepoints.Select(c => $"{c:x}")) + ".svg";
+
+                        var replacement = $"<icon path=\"chatemojis:emojis/{filename}\"></icon>";
+
+                        var prev = message[..stringPosition];
+                        if (VtmlEndRegex().IsMatch(prev)) replacement = " " + replacement;
+
+                        var runesLength = runeLength + snippet.Sum(r => r.Utf16SequenceLength);
+                        message = message.Remove(stringPosition, runesLength).Insert(stringPosition, replacement);
+
+                        stringPosition += replacement.Length;
+                        runeIdx += sequence.Count;
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (found) continue;
+            }
+
+            if (ChatEmojisModSystem.SingleCodepointEmojis?.Contains(codepoint) == true) {
+                // emoji fits in one codepoint, it's fine to directly replace
+                // this goes after multi codepoint emojis since they may use single codepoint emojis
+                // (e.g. flags use regional indicators)
+
+                var filename = $"{codepoint:x}.svg";
+                var replacement = $"<icon path=\"chatemojis:emojis/{filename}\"></icon>";
+
+                var prev = message[..stringPosition];
+                if (VtmlEndRegex().IsMatch(prev)) replacement = " " + replacement;
+
+                message = message.Remove(stringPosition, runeLength).Insert(stringPosition, replacement);
+                stringPosition += replacement.Length;
+                continue;
+            }
+
+            // normal character
+            stringPosition += runeLength;
+        }
     }
 
     // resize SVGs to line height

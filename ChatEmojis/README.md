@@ -1,6 +1,6 @@
 # Chat Emojis
 
-Adds Discord-like emojis into game chat. Use the emoji's shortcode (like `:fire:` or `:flushed:`) to render it in game.
+Adds Discord-like emojis into game chat. Use the emoji's shortcode (like `:fire:` or `:flushed:`) or paste the character directly (Windows + Period) to render it in game.
 
 ![Screenshot of emojis in action](./screenshot.png)
 
