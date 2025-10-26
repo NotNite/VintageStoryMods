@@ -67,4 +67,34 @@ public partial class Patches {
     private static void RasterizeSvgPrefix(IAsset svgAsset, ref int? color) {
         if (svgAsset.Location.Domain == "chatemojis") color = null;
     }
+
+    // premultiply emoji after rasterization so they don't look crusty
+    // thanks @belomaximka in the Vintage Story Discord server :purple_heart:
+    [HarmonyPatch(typeof(SvgLoader), "rasterizeSvg")]
+    [HarmonyPostfix]
+    public static void RasterizeSvgPostfix(IAsset svgAsset, ref byte[] __result) {
+        if (svgAsset.Location.Domain == "chatemojis") {
+            var pixelCount = __result.Length / 4;
+
+            for (var p = 0; p < pixelCount; p++) {
+                var i = p * 4;
+                var r = __result[i + 0];
+                var g = __result[i + 1];
+                var b = __result[i + 2];
+                var a = __result[i + 3];
+
+                if (a == 255) continue;
+                if (a == 0) {
+                    __result[i + 0] = 0;
+                    __result[i + 1] = 0;
+                    __result[i + 2] = 0;
+                    continue;
+                }
+
+                __result[i + 0] = (byte) ((r * a + 127) / 255);
+                __result[i + 1] = (byte) ((g * a + 127) / 255);
+                __result[i + 2] = (byte) ((b * a + 127) / 255);
+            }
+        }
+    }
 }
