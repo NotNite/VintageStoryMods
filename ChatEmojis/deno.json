@@ -1,0 +1,5 @@
+{
+  "imports": {
+    "@twemoji/api": "npm:@twemoji/api@15.1.0"
+  }
+}

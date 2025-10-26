@@ -1,0 +1,11 @@
+bin/
+obj/
+*.zip
+
+.vs/
+.idea/
+.vscode/
+.zed/
+
+/local
+*.user

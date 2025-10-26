@@ -1,0 +1,30 @@
+<Project>
+    <PropertyGroup>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+        <OutputPath>bin/$(Configuration)/Mods/$(AssemblyName)</OutputPath>
+
+        <AssemblySearchPaths Condition="$(VINTAGE_STORY) != ''">$(AssemblySearchPaths);$(VINTAGE_STORY);$(VINTAGE_STORY)/Lib;$(VINTAGE_STORY)/Mods</AssemblySearchPaths>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Reference Include="VintagestoryAPI" Private="false"/>
+        <Reference Include="VintagestoryLib" Private="false"/>
+        <Reference Include="VSEssentials" Private="false"/>
+        <Reference Include="0Harmony" Private="false"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Include="modinfo.json" CopyToOutputDirectory="PreserveNewest"/>
+        <Content Include="modicon.png" CopyToOutputDirectory="PreserveNewest" Condition="Exists('modicon.png')"/>
+        <Content Include="assets/**" CopyToOutputDirectory="PreserveNewest"/>
+    </ItemGroup>
+
+    <Target Name="CreateZip" AfterTargets="Build" Condition="'$(Configuration)' == 'Release'">
+        <ZipDirectory
+            SourceDirectory="$(OutputPath)"
+            DestinationFile="$(MSBuildProjectDirectory)/$(MSBuildProjectName).zip"
+            Overwrite="true"
+        />
+    </Target>
+</Project>
