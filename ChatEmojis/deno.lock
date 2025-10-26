@@ -1,23 +1,13 @@
 {
   "version": "5",
   "specifiers": {
-    "npm:@twemoji/api@15.1.0": "15.1.0",
-    "npm:@twemoji/api@16.0.1": "16.0.1"
+    "npm:@twemoji/api@15.1.0": "15.1.0"
   },
   "npm": {
     "@twemoji/api@15.1.0": {
       "integrity": "sha512-CySXR4/e6vY0z9lC2tW9EVjsH6zzz2/LQvLRMwwpHsDI4xcaweSIP+LcESf1Mq7w2/zcrrhG4ozniMvpSsEXag==",
       "dependencies": [
-        "@twemoji/parser@15.1.0",
-        "fs-extra",
-        "jsonfile@5.0.0",
-        "universalify"
-      ]
-    },
-    "@twemoji/api@16.0.1": {
-      "integrity": "sha512-qe7QHeJKVLGNciwAMbu1S872PX5bt1RY0+0xqvN7gNQ+zd3MyRJ5n7dZowEJWYRAgTN5bAUGshD1YAmkFkyAkA==",
-      "dependencies": [
-        "@twemoji/parser@16.0.0",
+        "@twemoji/parser",
         "fs-extra",
         "jsonfile@5.0.0",
         "universalify"
@@ -25,9 +15,6 @@
     },
     "@twemoji/parser@15.1.0": {
       "integrity": "sha512-3HTiSxPvkWUJ4kZeCvwyKlIwkpTUfBOk6igpBBRQni58ceQMv5YK4smkc8vX/eqOlMMNER/9qobv+Q6Q8LVrqA=="
-    },
-    "@twemoji/parser@16.0.0": {
-      "integrity": "sha512-jmuIjkp3OIaEemwMy3sArBwZSuZkRqmueGwRe2Zk4cFzbUJISFBJSZLDUUBNIgq3c+nY49ideYN2OiII6JUqwA=="
     },
     "fs-extra@8.1.0": {
       "integrity": "sha512-yhlQgA6mnOJUKOsRUFsgJdQCvkKhcz8tlZG5HBQfReYZy46OwLcY+Zia0mtdHsOo9y/hP+CxMN0TU9QxoOtG4g==",

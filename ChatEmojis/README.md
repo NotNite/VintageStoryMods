@@ -1,4 +1,4 @@
-# Chat Emojis
+# [Chat Emojis](https://mods.vintagestory.at/chatemojis)
 
 Adds Discord-like emojis into game chat. Use the emoji's shortcode (like `:fire:` or `:flushed:`) or paste the character directly (Windows + Period) to render it in game.
 
