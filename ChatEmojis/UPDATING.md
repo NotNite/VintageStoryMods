@@ -14,19 +14,10 @@ Grab the Twemoji repository at that version (e.g. `https://github.com/jdecked/tw
 
 ## Extracting Discord's shortcode table
 
-This snippet copies the shortcode JSON to your clipboard. If DevTools is popped out, make sure to tab back into Discord so that the page is in focus (that's what the `setTimeout` is for).
+This snippet copies the shortcode JSON to your clipboard:
 
 ```js
-setTimeout(async () => {
-  try {
-    const shortcodes = spacepack.require(spacepack.findByCode("face_holding_back_tears", "surrogates")[0].id);
-    const shortcodesStr = JSON.stringify(shortcodes);
-    await navigator.clipboard.writeText(shortcodesStr);
-    console.log("ok copied");
-  } catch (e) {
-    console.error(e);
-  }
-}, 3000);
+copy(JSON.stringify(spacepack.findByCode("face_holding_back_tears", "surrogates")[0].exports))
 ````
 
 Paste that file into `../local/shortcodes.json` (such that it's at the root of the repository, so `VintageStoryMods/local/shortcodes.json` exists).
