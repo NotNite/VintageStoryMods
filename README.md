@@ -9,7 +9,7 @@ To build this solution, create a `Directory.Build.props.user` in this folder wit
 ```xml
 <Project>
     <PropertyGroup>
-        <VINTAGE_STORY>/home/julian/.local/share/flatpak/app/at.vintagestory.VintageStory/current/active/files/extra/vintagestory</VINTAGE_STORY>
+        <VINTAGE_STORY>/home/jules/.local/share/flatpak/app/at.vintagestory.VintageStory/current/active/files/extra/vintagestory</VINTAGE_STORY>
     </PropertyGroup>
 </Project>
 ```

@@ -4,9 +4,9 @@
   "name": "Chat Emojis",
   "authors": ["NotNite"],
   "description": "Adds Discord-like emojis into game chat",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "Side": "Client",
   "dependencies": {
-    "game": "1.21.5"
+    "game": "1.22.7"
   }
 }

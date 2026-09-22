@@ -4,13 +4,13 @@ I do this process using my Discord client mod [moonlight](https://moonlight-mod.
 
 ## Updating Twemoji
 
-First, figure out what Twemoji version Discord is using (`v15.1.0` as of writing):
+First, figure out what Twemoji version Discord is using (`v16.0.1` as of writing):
 
 ```js
 spacepack.inspect(spacepack.findByCode("jdecked/twemoji")[0].id)
-````
+```
 
-Grab the Twemoji repository at that version (e.g. `https://github.com/jdecked/twemoji/archive/refs/tags/v15.1.0.zip`) and place it in `../local/twemoji` (such that it's at the root of the repository, so `VintageStoryMods/local/twemoji/assets` exists).
+Grab the Twemoji repository at that version (e.g. `https://github.com/jdecked/twemoji/archive/refs/tags/v16.0.1.zip`) and place it in `../local/twemoji` (such that it's at the root of the repository, so `VintageStoryMods/local/twemoji/assets` exists).
 
 ## Extracting Discord's shortcode table
 

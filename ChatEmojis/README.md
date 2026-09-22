@@ -6,5 +6,5 @@ Adds Discord-like emojis into game chat. Use the emoji's shortcode (like `:fire:
 
 ## Credits
 
-- [jdecked/twemoji](https://github.com/jdecked/twemoji/releases/tag/v15.1.0) (CC-BY-4.0)
+- [jdecked/twemoji](https://github.com/jdecked/twemoji/releases/tag/v16.0.1) (CC-BY-4.0)
 - Discord's emoji shortcode table (extracted from the Discord client source code)
